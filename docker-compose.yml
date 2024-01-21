@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+    app:
+        container_name: app
+        build:
+            dockerfile: Dockerfile
+            context: .
+        env_file: .env.docker
+        ports:
+            - 8080:8080
+        volumes:
+            - .:/home/app:cached
+            - ./package.json:/home/app/package.json:cached
+        depends_on:
+          db:
+            condition: service_healthy
+        networks:
+            - default_services_network
+
+networks:
+    default_services_network:
+        name: devops-project-services
